@@ -21,13 +21,9 @@ contract StablePriceOracle is IPriceOracle {
     uint256 public immutable price4Letter;
     uint256 public immutable price5Letter;
 
-    // Oracle address
-    AggregatorInterface public immutable usdOracle;
-
     event RentPriceChanged(uint256[] prices);
 
-    constructor(AggregatorInterface _usdOracle, uint256[] memory _rentPrices) {
-        usdOracle = _usdOracle;
+    constructor(uint256[] memory _rentPrices) {
         price1Letter = _rentPrices[0];
         price2Letter = _rentPrices[1];
         price3Letter = _rentPrices[2];
@@ -85,13 +81,13 @@ contract StablePriceOracle is IPriceOracle {
     }
 
     function attoUSDToWei(uint256 amount) internal view returns (uint256) {
-        uint256 ethPrice = uint256(usdOracle.latestAnswer());
-        return (amount * 1e8) / ethPrice;
+        // Don't need a price oracle here, since our prices are in xDai
+        return amount * 1e8;
     }
 
     function weiToAttoUSD(uint256 amount) internal view returns (uint256) {
-        uint256 ethPrice = uint256(usdOracle.latestAnswer());
-        return (amount * ethPrice) / 1e8;
+        // Don't need a price oracle here, since our prices are in xDai
+        return amount / 1e8;
     }
 
     function supportsInterface(
